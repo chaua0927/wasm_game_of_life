@@ -13,8 +13,9 @@
 
 ## About
 
-This project is designed for sampling the process from developing and compiling Rust libraries into WebAssembly and
-publishing the resulting package to NPM.
+This project is designed to use Conway's Game of Life for sampling the process from developing and compiling Rust libraries into WebAssembly and publishing the resulting package to NPM.
+
+___WARNING: This program features flashing lights and patterns. Viewer discretion is advised.___
 
 ## 🚴 Usage
 

@@ -1,8 +1,8 @@
 import { memory } from "wasm-game-of-life/wasm_game_of_life_bg";
 import { Universe, Cell } from "wasm-game-of-life";
 
-const CELL_SIZE = 5; // Units in px
-const CELL_BORDER_SIZE = 1; // Units in px
+const CELL_SIZE = 8; // Units in px
+const CELL_BORDER_SIZE = 2; // Units in px
 const GRID_COLOR = '#CCCCCC';
 const DEAD_COLOR = '#FFFFFF';
 const ALIVE_COLOR = '#000000';
