@@ -27,6 +27,12 @@ cargo generate --git https://github.com/rustwasm/wasm-pack-template.git --name m
 cd my-project
 ``` -->
 
+### 🌲 Run on localhost:8080 with `npm run start`
+```
+cd www
+npm run start
+```
+
 ### 🛠️ Build with `wasm-pack build`
 
 ```
