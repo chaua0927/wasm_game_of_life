@@ -4,9 +4,9 @@
 
   <strong>A mini-project sampling Rust and WebAssembly.</strong>
 
-  <p>
+  <!-- <p>
     <a href="https://travis-ci.org/rustwasm/wasm-pack-template"><img src="https://img.shields.io/travis/rustwasm/wasm-pack-template.svg?style=flat-square" alt="Build Status" /></a>
-  </p>
+  </p> -->
 
   <sub>Many thanks to the efforts of the The Rust and WebAssembly Working Group 🦀</sub>
 </div>
