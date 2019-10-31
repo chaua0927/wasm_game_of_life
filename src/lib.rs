@@ -10,6 +10,14 @@ use wasm_bindgen::prelude::*;
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
 extern crate js_sys;
+extern crate web_sys;
+
+// Macro to provide `println!(..)`-style syntax for console.log
+macro_rules! log {
+    ( $($t:tt)* ) => {
+        web_sys::console::log_1(&format!( $($t)* ).into());
+    }
+}
 
 #[wasm_bindgen]
 extern {
@@ -65,6 +73,8 @@ impl Universe {
     }
 
     pub fn new() -> Universe {
+        utils::set_panic_hook();
+
         let width = 64;
         let height = 64;
 
@@ -110,6 +120,14 @@ impl Universe {
                     //Other cases remain in their current state
                     (otherwise, _) => otherwise
                 };
+                // log!(
+                //     "Initial: cell[{},{}] is {:?} and has {} live neighbors",
+                //     row, col, cell, live_neighbors
+                // );
+                // log!(
+                //     "After:   cell[{},{}] is {:?}",
+                //     row, col, next_cell
+                // );
                 next[index] = next_cell;
             }
         }
