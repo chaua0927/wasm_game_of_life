@@ -16,17 +16,40 @@ canvas.width = (CELL_SIZE + CELL_BORDER_SIZE) * height + CELL_BORDER_SIZE;
 canvas.height = (CELL_SIZE + CELL_BORDER_SIZE) * width + CELL_BORDER_SIZE;
 
 const context = canvas.getContext('2d');
+let animationId = null;
+
+const isPaused = () => {
+    return animationId === null;
+}
+
+const playPauseButton = document.querySelector('#play-pause-button');
+
+const play = () => {
+    playPauseButton.textContent = '⏸ Pause';
+    renderLoop();
+}
+
+const pause = () => {
+    playPauseButton.textContent = '▶ Play';
+    cancelAnimationFrame(animationId);
+    animationId = null;
+}
+
+playPauseButton.addEventListener('click', event => {
+    if (isPaused()) {
+        play();
+    } else {
+        pause();
+    }
+})
 
 const renderLoop = () => {
     universe.tick();
 
     drawGrid();
     drawCells();
-    requestAnimationFrame(renderLoop);
+    animationId = requestAnimationFrame(renderLoop);
 }
-
-requestAnimationFrame(renderLoop);
-
 
 const drawGrid = () => {
     context.beginPath();
@@ -74,3 +97,5 @@ const drawCells = () => {
 
     context.stroke();
 }
+
+play();
