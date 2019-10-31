@@ -9,6 +9,8 @@ use wasm_bindgen::prelude::*;
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
+extern crate js_sys;
+
 #[wasm_bindgen]
 extern {
     fn alert(s: &str);
@@ -56,8 +58,8 @@ impl Universe {
 
         //Default seeding pattern
         let cells = (0..width * height)
-            .map(|i| {
-                if i % 2 == 0 || i % 7 == 0 {
+            .map(|_| {
+                if js_sys::Math::random() < 0.5 {
                     Cell::Alive
                 } else {
                     Cell:: Dead
