@@ -1,7 +1,7 @@
 import { memory } from 'wasm-game-of-life/wasm_game_of_life_bg';
 import { Universe, Cell } from 'wasm-game-of-life';
-import { Fps } from './src/fps';
-import { GameCanvas } from './src/game-canvas';
+import { Fps } from './components/fps';
+import { GameCanvas } from './components/game-canvas';
 
 const universe = Universe.new();
 const cellsPtr = universe.cells();
