@@ -2,6 +2,7 @@ import { memory } from 'wasm-game-of-life/wasm_game_of_life_bg';
 import { Universe, Cell } from 'wasm-game-of-life';
 import { Fps } from './components/fps';
 import { GameCanvas } from './components/game-canvas';
+import { PlayPauseButton } from './components/play-pause-button';
 
 const universe = Universe.new();
 const cellsPtr = universe.cells();
@@ -21,29 +22,19 @@ const isPaused = () => {
     return animationId === null;
 }
 
-const fps = new Fps(document.querySelector('#fps'));
-const canvas = new GameCanvas(document.querySelector('#game-of-life-canvas'), universe.width(), universe.height(), 
-                                handleToggleCell, isCellDead);
-const playPauseButton = document.querySelector('#play-pause-button');
-
-const play = () => {
-    playPauseButton.textContent = '⏸ Pause';
+const handlePlay = () => {
     renderLoop();
 }
 
-const pause = () => {
-    playPauseButton.textContent = '▶ Play';
+const handlePause = () => {
     cancelAnimationFrame(animationId);
     animationId = null;
 }
 
-playPauseButton.addEventListener('click', event => {
-    if (isPaused()) {
-        play();
-    } else {
-        pause();
-    }
-})
+const fps = new Fps(document.querySelector('#fps'));
+const canvas = new GameCanvas(document.querySelector('#game-of-life-canvas'), universe.width(), universe.height(), 
+                                handleToggleCell, isCellDead);
+const playPauseButton = new PlayPauseButton(document.querySelector('#play-pause-button'), isPaused, handlePlay, handlePause);
 
 const renderLoop = () => {
     fps.render();
@@ -55,4 +46,4 @@ const renderLoop = () => {
     animationId = requestAnimationFrame(renderLoop);
 }
 
-play();
+playPauseButton.play();
