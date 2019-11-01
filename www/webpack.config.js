@@ -9,6 +9,17 @@ module.exports = {
   },
   mode: "development",
   plugins: [
-    new CopyWebpackPlugin(['index.html'])
+    new CopyWebpackPlugin(['index.html']),
   ],
+  module: {
+      rules: [
+          {
+              test: /\.css/,
+              loader: [
+                  'style-loader',
+                  'css-loader'
+              ]
+          }
+      ]
+  },
 };

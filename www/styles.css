@@ -1,0 +1,45 @@
+body {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+main {
+    min-height: 100vh;
+    font-size: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+h1 {
+    margin-top: 2rem;
+    margin-bottom: 0rem ;
+}
+
+h2 {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+button {
+    margin-bottom: 1rem;
+}
+
+#fps {
+    font-family: monospace;
+    white-space: pre;
+}
+
+#control-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#control-bar > * {
+    margin: auto;
+}
