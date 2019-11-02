@@ -4,6 +4,10 @@ import { Fps } from './components/fps';
 import { GameCanvas } from './components/game-canvas';
 import { PlayPauseButton } from './components/play-pause-button';
 import { Button } from './components/button';
+import { RelativeRateInfo } from './components/relative-rate-info';
+
+const DEFAULT_UPDATE_INTERVAL = 1000; // in milliseconds
+const UPDATE_INTERVAL_MODIFIER_INCREMENT = 200; // in milliseconds
 
 const universe = Universe.new();
 const cellsPtr = universe.cells();
@@ -18,10 +22,26 @@ const isCellDead = (index) => {
 }
 
 let animationId = null;
+let updateId = null;
+let updateInterval = DEFAULT_UPDATE_INTERVAL;
+let isChangedUpdateInterval = false;
+let isMaxSpeed = false;
+let isToggledMaxSpeed = false;
 let isToggledPlayPause = true;
+
+const calcRelativeUpdateRate = () => {
+    return DEFAULT_UPDATE_INTERVAL / updateInterval;
+}
 
 const isPaused = () => {
     return animationId === null;
+}
+
+const updateUniverse = () => {
+    if (!isPaused()) {
+        universe.tick();
+        setTimeout(updateUniverse, updateInterval);
+    }
 }
 
 const play = () => {
@@ -32,6 +52,8 @@ const play = () => {
 const pause = () => {
     cancelAnimationFrame(animationId);
     animationId = null;
+    clearTimeout(updateId);
+    relativeRateInfo.render(isPaused(), isMaxSpeed, calcRelativeUpdateRate());
 }
 
 const handlePlayPause = () => {
@@ -42,15 +64,53 @@ const handlePlayPause = () => {
     }
     isToggledPlayPause = true;
 }
+
+const incUpdateButton = document.querySelector('#inc-update-button');
+const decUpdateButton = document.querySelector('#dec-update-button');
+
+const handleIncreaseUpdateInterval = () => {
+    if (!isMaxSpeed && !isPaused()) {
+        if (updateInterval === UPDATE_INTERVAL_MODIFIER_INCREMENT) {
+            if (decUpdateButton.disabled) {
+                decUpdateButton.disabled = false;
+            }
+        }
+        updateInterval += UPDATE_INTERVAL_MODIFIER_INCREMENT;
+        isChangedUpdateInterval = true;
+    }
+}
+
+const handleDecreaseUpdateInterval = () => {
+    if (!isMaxSpeed && !isPaused()) {
+        if (updateInterval > UPDATE_INTERVAL_MODIFIER_INCREMENT) {
+            updateInterval -= UPDATE_INTERVAL_MODIFIER_INCREMENT;
+            isChangedUpdateInterval = true;
+
+            if (updateInterval === UPDATE_INTERVAL_MODIFIER_INCREMENT) {
+                decUpdateButton.disabled = true;
+            } 
+        }
+    }
+}
+
 }
 
 const fps = new Fps(document.querySelector('#fps'));
 const canvas = new GameCanvas(document.querySelector('#game-of-life-canvas'), universe.width(), universe.height(), 
                                 handleToggleCell, isCellDead);
 const playPauseButton = new PlayPauseButton(document.querySelector('#play-pause-button'), handlePlayPause, isPaused);
+const incUpdateIntervalButton = new Button(incUpdateButton, handleIncreaseUpdateInterval);
+const decUpdateIntervalButton = new Button(decUpdateButton, handleDecreaseUpdateInterval);
+const relativeRateInfo = new RelativeRateInfo(document.querySelector('#relative-rate-info'));
 
 const renderLoop = () => {
     fps.render();
+    if (isChangedUpdateInterval || isToggledPlayPause || isToggledMaxSpeed) {
+        relativeRateInfo.render(isPaused(), isMaxSpeed, calcRelativeUpdateRate());
+        isChangedUpdateInterval = false;
+        isToggledPlayPause = false;
+        isToggledMaxSpeed = false;
+    }
 
     universe.tick();
 

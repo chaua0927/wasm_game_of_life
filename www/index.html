@@ -10,9 +10,17 @@
     <main>
         <h1>Conway's Game Of Life</h1>
         <h2>Built using Rust + WebAssembly</h2>
+
         <section id="control-bar">
-            <button id="play-pause-button">Pause</button>
-            <div id="fps"></div>
+            <div id="speed-panel">
+                <div id="relative-rate-info" class="info"></div>
+                <div class="button-group">
+                    <button id="inc-update-button">⏪</button>
+                    <button id="play-pause-button">⏸ Pause</button>
+                    <button id="dec-update-button">⏩</button>
+                </div>
+            </div>
+            <div id="fps" class="info"></div>
         </section>
         <canvas id="game-of-life-canvas"></canvas>
     </main>

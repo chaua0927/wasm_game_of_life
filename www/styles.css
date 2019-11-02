@@ -29,9 +29,15 @@ button {
     margin-bottom: 1rem;
 }
 
-#fps {
+.info {
     font-family: monospace;
     white-space: pre;
+}
+
+.button-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #control-bar {
@@ -42,4 +48,10 @@ button {
 
 #control-bar > * {
     margin: auto;
+}
+
+#speed-panel {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
 }
