@@ -3,6 +3,7 @@ import { Universe, Cell } from 'wasm-game-of-life';
 import { Fps } from './components/fps';
 import { GameCanvas } from './components/game-canvas';
 import { PlayPauseButton } from './components/play-pause-button';
+import { Button } from './components/button';
 
 const universe = Universe.new();
 const cellsPtr = universe.cells();
@@ -17,24 +18,36 @@ const isCellDead = (index) => {
 }
 
 let animationId = null;
+let isToggledPlayPause = true;
 
 const isPaused = () => {
     return animationId === null;
 }
 
-const handlePlay = () => {
+const play = () => {
     renderLoop();
+    isToggledPlayPause = true;
 }
 
-const handlePause = () => {
+const pause = () => {
     cancelAnimationFrame(animationId);
     animationId = null;
+}
+
+const handlePlayPause = () => {
+    if (isPaused()) {
+        play();
+    } else {
+        pause();
+    }
+    isToggledPlayPause = true;
+}
 }
 
 const fps = new Fps(document.querySelector('#fps'));
 const canvas = new GameCanvas(document.querySelector('#game-of-life-canvas'), universe.width(), universe.height(), 
                                 handleToggleCell, isCellDead);
-const playPauseButton = new PlayPauseButton(document.querySelector('#play-pause-button'), isPaused, handlePlay, handlePause);
+const playPauseButton = new PlayPauseButton(document.querySelector('#play-pause-button'), handlePlayPause, isPaused);
 
 const renderLoop = () => {
     fps.render();
@@ -43,7 +56,8 @@ const renderLoop = () => {
 
     canvas.drawGrid();
     canvas.drawCells();
+
     animationId = requestAnimationFrame(renderLoop);
 }
 
-playPauseButton.play();
+play();
