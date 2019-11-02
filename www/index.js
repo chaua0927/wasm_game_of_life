@@ -46,6 +46,9 @@ const updateUniverse = () => {
 
 const play = () => {
     renderLoop();
+    if (!isMaxSpeed) {
+        updateId = setTimeout(updateUniverse, updateInterval);
+    }
     isToggledPlayPause = true;
 }
 
@@ -93,6 +96,17 @@ const handleDecreaseUpdateInterval = () => {
     }
 }
 
+const maxSpdButton = document.querySelector('#max-speed-button');
+
+const handleMaxSpeedClick = () => {
+    if (!isPaused()) {
+        isToggledMaxSpeed = true;
+        isMaxSpeed = !isMaxSpeed;
+        if (!isMaxSpeed) {
+            pause();
+            play();
+        }
+    }
 }
 
 const fps = new Fps(document.querySelector('#fps'));
@@ -102,6 +116,7 @@ const playPauseButton = new PlayPauseButton(document.querySelector('#play-pause-
 const incUpdateIntervalButton = new Button(incUpdateButton, handleIncreaseUpdateInterval);
 const decUpdateIntervalButton = new Button(decUpdateButton, handleDecreaseUpdateInterval);
 const relativeRateInfo = new RelativeRateInfo(document.querySelector('#relative-rate-info'));
+const maxSpeedButton = new Button(maxSpdButton, handleMaxSpeedClick);
 
 const renderLoop = () => {
     fps.render();
@@ -112,7 +127,10 @@ const renderLoop = () => {
         isToggledMaxSpeed = false;
     }
 
-    universe.tick();
+    if (isMaxSpeed) {
+        clearTimeout(updateId);
+        universe.tick();
+    }
 
     canvas.drawGrid();
     canvas.drawCells();
