@@ -10,8 +10,6 @@ const DEFAULT_UPDATE_INTERVAL = 1000; // in milliseconds
 const UPDATE_INTERVAL_MODIFIER_INCREMENT = 200; // in milliseconds
 
 const universe = Universe.new();
-const cellsPtr = universe.cells();
-const cells = new Uint8Array(memory.buffer, cellsPtr, universe.width() * universe.height());
 
 const handleToggleCell = (row, col) => {
     universe.toggle_cell(row, col);
@@ -20,7 +18,6 @@ const handleToggleCell = (row, col) => {
 const isCellDead = (index) => {
     //FIXME?: Update pointer - seems to change with every other tick, due to Rust+wasm binding impl?
     const cellsPtr = universe.cells();
-    // console.log(cellsPtr);
     const cells = new Uint8Array(memory.buffer, cellsPtr, universe.width() * universe.height());
     return cells[index] === Cell.Dead;
 }
@@ -44,7 +41,7 @@ const isPaused = () => {
 const updateUniverse = () => {
     if (!isPaused()) {
         universe.tick();
-        setTimeout(updateUniverse, updateInterval);
+        fps.updateStats();
     }
 }
 
@@ -134,6 +131,7 @@ const renderLoop = () => {
     if (isMaxSpeed) {
         clearTimeout(updateId);
         universe.tick();
+        fps.updateStats();
     }
 
     canvas.drawGrid();
