@@ -3,8 +3,13 @@ export class Fps {
         this.fpsElement = fpsElement;
         this.frames = [];
         this.lastTimestamp = performance.now();
+        this.fps = 0;
+        this.mean = 0;
+        this.min = Infinity;
+        this.max = -Infinity;
     }
 
+    //@return Time since previous frame/timestamp (in seconds)
     calcFPS() {
         const now = performance.now();
         const delta = now - this.lastTimestamp;
@@ -12,31 +17,33 @@ export class Fps {
         return 1 / delta * 1000
     }
 
-    render() {
-        const fps = this.calcFPS();
-        this.frames.push(fps);
+    updateStats() {
+        // Update fps
+        this.fps = this.calcFPS();
+        this.frames.push(this.fps);
         if (this.frames.length > 100) {
             this.frames.shift;
         }
 
-        // Calculate stats: min, max, mean
-        let min = Infinity;
-        let max = -Infinity;
+        // Calculate and update stats: min, max, mean
         let sum = 0;
         for (let i = 0; i < this.frames.length; i++) {
             sum += this.frames[i];
-            min = Math.min(this.frames[i], min);
-            max = Math.max(this.frames[i], max);
+            console.log(`${this.frames[i]} lt? ${this.min} :  ${Math.min(this.frames[i], this.min)}`);
+            this.min = Math.min(this.frames[i], this.min);
+            this.max = Math.max(this.frames[i], this.max);
         }
-        let mean = sum / this.frames.length;
-
+        this.mean = sum / this.frames.length;
+    }
+    
+    render() {
         // Display stats
         this.fpsElement.textContent = `
         Frames per second:
-                latest = ${Math.round(fps)}
-        avg (last 100) = ${Math.round(mean)} 
-        max (last 100) = ${Math.round(max)}
-        min (last 100) = ${Math.round(min)}
+                latest = ${Math.round(this.fps)}
+        avg (last 100) = ${Math.round(this.mean)} 
+        max (last 100) = ${Math.round(this.max)}
+        min (last 100) = ${Math.round(this.min)}
         `;
     }
 }
