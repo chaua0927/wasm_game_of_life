@@ -18,6 +18,10 @@ const handleToggleCell = (row, col) => {
 }
 
 const isCellDead = (index) => {
+    //FIXME?: Update pointer - seems to change with every other tick, due to Rust+wasm binding impl?
+    const cellsPtr = universe.cells();
+    // console.log(cellsPtr);
+    const cells = new Uint8Array(memory.buffer, cellsPtr, universe.width() * universe.height());
     return cells[index] === Cell.Dead;
 }
 
