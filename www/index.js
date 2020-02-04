@@ -9,6 +9,7 @@ import { RelativeRateInfo } from './components/relative-rate-info';
 const DEFAULT_UPDATE_INTERVAL = 1000; // in milliseconds
 const UPDATE_INTERVAL_MODIFIER_INCREMENT = 200; // in milliseconds
 
+// Universe Set Up and Handlers
 const universe = Universe.new();
 
 const handleToggleCell = (row, col) => {
@@ -22,6 +23,8 @@ const isCellDead = (index) => {
     return cells[index] === Cell.Dead;
 }
 
+
+// Update Speed Set Up and Handlers
 let animationId = null;
 let updateId = null;
 let updateInterval = DEFAULT_UPDATE_INTERVAL;
@@ -70,8 +73,11 @@ const handlePlayPause = () => {
     isToggledPlayPause = true;
 }
 
+
+// Update Speed Controls Set Up and Handlers
 const incUpdateButton = document.querySelector('#inc-update-button');
 const decUpdateButton = document.querySelector('#dec-update-button');
+const maxSpdButton = document.querySelector('#max-speed-button');
 
 const handleIncreaseUpdateInterval = () => {
     if (!isMaxSpeed && !isPaused()) {
@@ -98,8 +104,6 @@ const handleDecreaseUpdateInterval = () => {
     }
 }
 
-const maxSpdButton = document.querySelector('#max-speed-button');
-
 const handleMaxSpeedClick = () => {
     if (!isPaused()) {
         isToggledMaxSpeed = true;
@@ -111,6 +115,8 @@ const handleMaxSpeedClick = () => {
     }
 }
 
+
+// App Structure Set Up
 const fps = new Fps(document.querySelector('#fps'));
 const canvas = new GameCanvas(document.querySelector('#game-of-life-canvas'), universe.width(), universe.height(), 
                                 handleToggleCell, isCellDead);
@@ -141,4 +147,5 @@ const renderLoop = () => {
     animationId = requestAnimationFrame(renderLoop);
 }
 
+// Start App
 play();
