@@ -42,6 +42,7 @@ const updateUniverse = () => {
     if (!isPaused()) {
         universe.tick();
         fps.updateStats();
+        updateId = setTimeout(updateUniverse, updateInterval);
     }
 }
 
