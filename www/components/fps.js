@@ -29,7 +29,6 @@ export class Fps {
         let sum = 0;
         for (let i = 0; i < this.frames.length; i++) {
             sum += this.frames[i];
-            console.log(`${this.frames[i]} lt? ${this.min} :  ${Math.min(this.frames[i], this.min)}`);
             this.min = Math.min(this.frames[i], this.min);
             this.max = Math.max(this.frames[i], this.max);
         }
